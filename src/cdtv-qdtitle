@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+
+
+
+#  ** Quick 'n Dirty CDTV Title Generator **
+#
+#  written by Captain Future / CDTV Land
+#  v0.1 - 13-Jun-2025
+
+
+#  DESCRIPTION:  Creates a bootable CDTV title from a directory's contents
+
+#  USAGE:
+
+#  cdtv-qdtitle  <directory> [iso-filename]
+
+#      directory     - required parameter: contains the files you want to include
+#                        in the root dir of your CDTV Title ISO
+#      iso-filename  - optional parameter: specify the filename of the ISO to create
+#                        if you don't provide one, it will be called "CDTVtitle.iso"
+
+
+
+
+# Assumptions: 
+
+# - the PVD is always at sector 16
+
+
+# TODO: 
+
+# - Check md5 hash of CDTV.tm to make sure it's contents is correct
+# - Add more URLs of CDTV.tm sources
+
+
+ISO="${2}"
+CDTVTM="$TMPDIR/.cache_cdtv.tm"
+STAGINGDIR="${1}"
+
+function source_tm {
+
+    # First see if the file is in current dir
+
+    LOCALFIND=$(find . -iname cdtv.tm -print -quit)
+    if [ ! -z "${LOCALFIND}" ]; then
+      echo "File found in current dir."
+      cp "${LOCALFIND}" "${CDTVTM}"
+      return 0
+    fi
+
+    # Try the interwebs next
+
+    echo "Attempt 1"
+    curl --fail -s -L -H Range:bytes=11827200-11849351 -o "${CDTVTM}" https://archive.org/download/hound-of-the-baskervilles-cdtv/Hound%20of%20the%20Baskervilles%2C%20The%20%281991%29%28On-line%29%28Track%2001%20of%2065%29%5B%21%5D.iso
+    if [ $? -eq 0 ]; then
+      echo "File sourced."
+      return 0
+    fi
+
+    echo "Attempt 2"
+    curl --fail -s -L -H Range:bytes=24920064-24942215 -o "${CDTVTM}" https://archive.org/download/a-bun-for-barney/Bun%20for%20Barney%2C%20A%20%281991%29%28MultiMedia%20Corporation%29%28Track%201%20of%202%29%5B%21%5D.iso
+    if [ $? -eq 0 ]; then
+      echo "File sourced."
+      return 0
+    fi
+
+    # Alas! No CDTV.tm for you.
+
+    return 1
+
+}
+
+
+# Check inputs
+
+if [ -z "${STAGINGDIR}" ]; then
+  echo "ERROR: Please provide the path to the directory you want create a CDTV title of as the first paramater."
+  exit
+fi
+
+if [ -z "${ISO}" ]; then
+  ISO="CDTVtitle.iso"
+fi
+
+
+# Check CDTV.tm
+
+if [ -f "${CDTVTM}" ]; then
+  echo "Cached TM file found."
+else
+  echo "TM file not found. Sourcing..."
+  source_tm
+
+    if [ $? -ne 0 ]; then
+        echo "ERROR: Could not source CDTV.TM file. Please provide it and place it in the current work dir."
+    fi
+fi
+
+# Create an ISO
+
+mkisofs -relaxed-filenames \
+        -d \
+        -input-charset iso8859-1 \
+        -output-charset iso8859-1  \
+        -iso-level 3 \
+        -A "" \
+        -o "${ISO}" \
+        -sysid CDTV  \
+        "${STAGINGDIR}"
+
+# Inject tm file into System Area, sector 2
+
+dd if="${CDTVTM}" of="${ISO}" bs=2048 count=11 seek=2 conv=notrunc
+
+# Set CDFS boot options in Application Use field of Primary Volume Descriptor
+
+printf '\x00TM\x00\x14\x00\x00\x56\x88\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' | dd of="${ISO}" bs=1 count=27 seek=33651 conv=notrunc
+
