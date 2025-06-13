@@ -94,6 +94,7 @@ else
 
     if [ $? -ne 0 ]; then
         echo "ERROR: Could not source CDTV.TM file. Please provide it and place it in the current work dir."
+        exit 1
     fi
 fi
 
