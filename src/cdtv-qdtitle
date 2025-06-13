@@ -34,7 +34,8 @@
 
 
 ISO="${2}"
-CDTVTM="$TMPDIR/.cache_cdtv.tm"
+CDTVTM="~/.cache_cdtv.tm"
+eval CDTVTM=$CDTVTM
 STAGINGDIR="${1}"
 
 function source_tm {
