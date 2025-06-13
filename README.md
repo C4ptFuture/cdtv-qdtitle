@@ -21,7 +21,7 @@ cdtv-qdtitle  <directory> [iso-filename] [volume-id]
 E.g.:
 
 ```sh
-cdtv-qdtitle  my_awesome_cdtv_title [CDTVtitle.iso] [AWESOME]
+cdtv-qdtitle  my_awesome_cdtv_title CDTVtitle.iso AWESOME
 ```
 
 The example above will take all the files in the directory called `my_awesome_cdtv_title` and create a bootable CDTV title ISO image of it, named `CDTVtitle.iso`. The disc will appear on your system with the volume name _AWESOME_, when you mount it.
