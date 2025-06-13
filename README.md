@@ -49,12 +49,12 @@ Another limitation currently is that this software generates ISOs with upper cas
 ## FAQ
 
 ### Why is this called Quick and Dirty CDTV Title Generator?
-Because that's what it is! It was thrown together one morning to satisfy a use case we had on the CDTV Land Discord: Being able to build bootable CDTV ISOs _and_ being able to distribute the actual code itself as part of a project without any copyright issues. This `cdtv-qdtitle` repo does not host any Commodore or Amiga IP, and is freely distributable under the GPLv3 license.
+Because that's what it is! It was thrown together one morning to satisfy a specific use case we had on the CDTV Land Discord: Being able to automate the build process of bootable CDTV title ISOs _and_ being able to distribute the actual code itself as part of a project without any copyright issues. This `cdtv-qdtitle` repo does not host any Commodore or Amiga IP, and is freely distributable under the GPLv3 license.
 
 ### Will it ever support additional CDFS boot options or optimizations?
 Seek optimizations, probably not. The script wouldn't be so quick and dirty anymore ;-) But I can see the benefit of adding support for several CDFS boot options like setting the directory and file cache sizes, because being able to tweak those settings can sometimes make memory hungry applications work on stock CDTV systems with just 1 MB of memory, that would not run on such systems otherwise.
 
 ### I'm on Windows. How do I use this?
-If you're looking for a way to author CDTV titles and you don't care about being able to run it as part of a script or automation/pipelines, then I would recommend getting hold of _ISOCD_ and running that in WinUAE. There is also a Windows application called [ISOCD-Win](https://github.com/fuseoppl/isocd-win), which is a replacement that runs on Windows and also has a GUI. 
+If you're looking for a way to author CDTV titles and you don't care about being able to run it as part of a script or automation/pipelines, then I would recommend getting hold of _ISOCD_ and running that in WinUAE. There is also a Windows application called [ISOCD-Win](https://github.com/fuseoppl/isocd-win), which is a replacement that runs on Windows natively and also has a GUI. 
 
 There _are_ ways of running bash scripts on Windows (google for _WSL_ or _Git-bash_), but that's beyond the scope of this document and is not "officially" supported.
