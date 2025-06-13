@@ -12,12 +12,16 @@
 
 #  USAGE:
 
-#  cdtv-qdtitle  <directory> [iso-filename]
+#  cdtv-qdtitle  <directory> [iso-filename] [volume-id]
 
 #      directory     - required parameter: contains the files you want to include
 #                        in the root dir of your CDTV Title ISO
 #      iso-filename  - optional parameter: specify the filename of the ISO to create
 #                        if you don't provide one, it will be called "CDTVtitle.iso"
+#      volume-id     - optional parameter: specify the volume ID to use for the ISO 
+#                        if you don't provide one, it will be called "CDTV_TITLE".
+#                        Note: currently you have to also specify the iso-filename
+#                              if you want to specify the volume-id
 
 
 
@@ -34,10 +38,11 @@
 # - Check for mkisofs in path
 
 
-ISO="${2}"
 CDTVTM="~/.cache_cdtv.tm"
 eval CDTVTM=$CDTVTM
 STAGINGDIR="${1}"
+ISO="${2}"
+VOLNAME="${3}"
 
 function source_tm {
 
@@ -84,6 +89,10 @@ if [ -z "${ISO}" ]; then
   ISO="CDTVtitle.iso"
 fi
 
+if [ -z "${VOLNAME}" ]; then
+  VOLNAME="CDTV_TITLE"
+fi
+
 which mkisofs
 if [ $? -ne 0 ]; then
   echo "ERROR: Could not find mkisofs. Please make sure it is installed and found through your PATH env."
@@ -112,7 +121,7 @@ mkisofs -relaxed-filenames \
         -input-charset iso8859-1 \
         -output-charset iso8859-1  \
         -iso-level 3 \
-        -A "" \
+        -V "${VOLNAME}" \
         -o "${ISO}" \
         -sysid CDTV  \
         "${STAGINGDIR}"
