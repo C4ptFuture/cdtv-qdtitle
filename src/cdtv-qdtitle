@@ -2,10 +2,13 @@
 
 
 
-#  ** Quick 'n Dirty CDTV Title Generator **
+#  ** Quick 'n Dirty CDTV Title Generator v0.4 **
 #
 #  written by Captain Future / CDTV Land
-#  v0.3 - 13-Jun-2025
+
+#  v0.3 - 13-Jun-2025 - initial release
+#  v0.4 - 14-Jun-2025 - hack to workaround WB1.3 .info files,
+#                         added support for leading dots filenames
 
 
 #  DESCRIPTION:  Creates a bootable CDTV title from a directory's contents
