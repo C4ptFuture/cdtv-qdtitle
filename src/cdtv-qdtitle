@@ -36,13 +36,25 @@
 
 # TODO: 
 
-# - Check md5 hash of CDTV.tm to make sure it's contents is correct
+# - Cache tm file in ~/.cache dir if exists
+# - Check md5 hash of CDTV.tm to make sure its contents is correct
 # - Add more URLs of CDTV.tm sources
-# - Check for mkisofs in path
 
 
-CDTVTM="~/.cache_cdtv.tm"
-eval CDTVTM=$CDTVTM
+
+
+# Determine which cache location to use for tm file. Prefer .cache dir if it exists.
+
+if [ -d ~/.cache ]; then
+  CDTVTM="~/.cache/cdtv.tm"
+else
+  CDTVTM="~/.cache_cdtv.tm"
+fi
+eval CDTVTM=$CDTVTM  # need to expand this for use later on
+
+
+# command line params
+
 STAGINGDIR="${1}"
 ISO="${2}"
 VOLNAME="${3}"
