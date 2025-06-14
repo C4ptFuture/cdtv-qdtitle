@@ -118,6 +118,8 @@ fi
 
 mkisofs -relaxed-filenames \
         -d \
+        -allow-leading-dots \
+        -allow-multidot \
         -input-charset iso8859-1 \
         -output-charset iso8859-1  \
         -iso-level 3 \
@@ -134,3 +136,5 @@ dd if="${CDTVTM}" of="${ISO}" bs=2048 count=11 seek=2 conv=notrunc
 
 printf '\x00TM\x00\x14\x00\x00\x56\x88\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' | dd of="${ISO}" bs=1 count=27 seek=33651 conv=notrunc
 
+# HACK: fix .info extensions to be lower case for WB1.3
+LC_CTYPE=C && LANG=C &&  sed -i.bak 's/.INFO;1/.info;1/g' "${ISO}" && rm -f "${ISO}".bak
