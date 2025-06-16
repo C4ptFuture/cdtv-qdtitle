@@ -9,6 +9,7 @@
 #  v0.3 - 13-Jun-2025 - initial release
 #  v0.4 - 14-Jun-2025 - hack to workaround WB1.3 .info files,
 #                         added support for leading dots filenames
+#  v0.5 - 16-Jun-2025 - BUGFIX: fix regex in WB 1.3 ".info" hack
 
 
 #  DESCRIPTION:  Creates a bootable CDTV title from a directory's contents
@@ -140,4 +141,4 @@ dd if="${CDTVTM}" of="${ISO}" bs=2048 count=11 seek=2 conv=notrunc
 printf '\x00TM\x00\x14\x00\x00\x56\x88\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' | dd of="${ISO}" bs=1 count=27 seek=33651 conv=notrunc
 
 # HACK: fix .info extensions to be lower case for WB1.3
-LC_CTYPE=C && LANG=C &&  sed -i.bak 's/.INFO;1/.info;1/g' "${ISO}" && rm -f "${ISO}".bak
+LC_CTYPE=C && LANG=C &&  sed -i.bak 's/\.INFO;1/\.info;1/g' "${ISO}" && rm -f "${ISO}".bak
